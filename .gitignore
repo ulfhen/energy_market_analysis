@@ -1,0 +1,6 @@
+.idea
+data_modules/__pycache__/
+__pycache__/
+*.py[cod]
+upd_epexspot.parquet
+.env
