@@ -196,6 +196,30 @@ class HistForecastDataset:
 
         # check if columns are the same
 
+        # columns we expect in forecast (historic without targets ) # TODO! THIS IS A HOT FIX !! TO BE FIXED
+        expected_cols = [
+            c for c in df_historic.columns if c not in set(self._targets_list)
+        ]
+
+        missing_in_forecast = [c for c in expected_cols if c not in df_forecast.columns]
+        if missing_in_forecast:
+            logger.error(
+                "df_forecast is missing columns present in df_historic (excluding targets). "
+                "Adding them to df_forecast with zeroes: %s",
+                missing_in_forecast,
+            )
+            for c in missing_in_forecast:
+                df_forecast[c] = 0
+
+        # (optional but often helpful) keep column order consistent with historic
+        df_forecast = df_forecast.reindex(
+            columns=expected_cols
+            + [c for c in df_forecast.columns if c not in expected_cols]
+        )
+
+        if not compare_columns(df_historic[expected_cols], df_forecast):
+            raise ValueError("df_historic and df_forecast must have same columns")
+
         if not compare_columns(
                 df_historic[[col for col in df_historic.columns if not col in list(self._targets_list)]],
                 df_forecast
