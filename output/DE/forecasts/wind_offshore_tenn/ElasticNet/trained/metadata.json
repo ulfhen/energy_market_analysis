@@ -88,8 +88,8 @@
                 "variance": 460559.6873056829,
                 "std": 678.6454798388353,
                 "r2": -1.8113042366378722,
-                "prediction_interval_coverage": 0.43452380952380953,
-                "prediction_interval_width": 3370.1355533022656
+                "prediction_interval_coverage": 0.44642857142857145,
+                "prediction_interval_width": 3377.2534015087226
             }
         },
         "2026-01-31T00:00:00+00:00": {
@@ -104,7 +104,7 @@
                 "std": 454.39903682094086,
                 "r2": -3.1222635114944586,
                 "prediction_interval_coverage": 0.9940476190476191,
-                "prediction_interval_width": 3444.6471500901293
+                "prediction_interval_width": 3446.4526491447523
             }
         },
         "2026-02-07T00:00:00+00:00": {
@@ -119,7 +119,7 @@
                 "std": 817.9863030456922,
                 "r2": 0.31029538546074686,
                 "prediction_interval_coverage": 0.9107142857142857,
-                "prediction_interval_width": 3415.762094815255
+                "prediction_interval_width": 3416.092388839007
             }
         },
         "2026-02-14T00:00:00+00:00": {
@@ -134,7 +134,7 @@
                 "std": 985.0099842468339,
                 "r2": 0.7693047982815138,
                 "prediction_interval_coverage": 0.9226190476190477,
-                "prediction_interval_width": 3416.245445596452
+                "prediction_interval_width": 3422.1894262692194
             }
         },
         "2026-02-21T00:00:00+00:00": {
@@ -149,7 +149,7 @@
                 "std": 1101.6765522756891,
                 "r2": 0.2151468634068786,
                 "prediction_interval_coverage": 0.6309523809523809,
-                "prediction_interval_width": 3419.0957642877556
+                "prediction_interval_width": 3413.502697911452
             }
         }
     }

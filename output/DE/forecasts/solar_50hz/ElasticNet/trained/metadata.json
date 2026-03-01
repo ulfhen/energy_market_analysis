@@ -127,8 +127,8 @@
                 "variance": 454110.5794962909,
                 "std": 673.877273319327,
                 "r2": -2.4011466774488524,
-                "prediction_interval_coverage": 0.9523809523809523,
-                "prediction_interval_width": 3469.9014475025433
+                "prediction_interval_coverage": 0.9583333333333334,
+                "prediction_interval_width": 3491.419189438897
             }
         },
         "2026-01-31T00:00:00+00:00": {
@@ -142,8 +142,8 @@
                 "variance": 665705.0329791846,
                 "std": 815.9074904541474,
                 "r2": -2.593591138056514,
-                "prediction_interval_coverage": 0.9226190476190477,
-                "prediction_interval_width": 3487.707261123405
+                "prediction_interval_coverage": 0.9166666666666666,
+                "prediction_interval_width": 3466.4176597412047
             }
         },
         "2026-02-07T00:00:00+00:00": {
@@ -157,8 +157,8 @@
                 "variance": 197363.88721086137,
                 "std": 444.2565556194544,
                 "r2": 0.8415495363961848,
-                "prediction_interval_coverage": 1.0,
-                "prediction_interval_width": 3498.420832324698
+                "prediction_interval_coverage": 0.9940476190476191,
+                "prediction_interval_width": 3483.781623269886
             }
         },
         "2026-02-14T00:00:00+00:00": {
@@ -173,7 +173,7 @@
                 "std": 641.5900115309981,
                 "r2": 0.8820579064581271,
                 "prediction_interval_coverage": 0.9702380952380952,
-                "prediction_interval_width": 3476.479374123678
+                "prediction_interval_width": 3468.7587993007674
             }
         },
         "2026-02-21T00:00:00+00:00": {
@@ -188,7 +188,7 @@
                 "std": 949.3310996037357,
                 "r2": 0.8799212565155382,
                 "prediction_interval_coverage": 0.8928571428571429,
-                "prediction_interval_width": 3465.6464028830515
+                "prediction_interval_width": 3468.5250906396623
             }
         }
     }
