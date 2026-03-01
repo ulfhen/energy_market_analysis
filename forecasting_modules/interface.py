@@ -32,7 +32,8 @@ def main_forecasting_pipeline(c_dict:dict,task_list:list, outdir:str, database:s
         df_hist, df_forecast = extract_from_database(
             main_pars=task, c_dict=c_dict, db_path=database, outdir=outdir, verbose=verbose, freq=freq,
         )
-        task['targets'] = list(df_hist.columns.difference(df_forecast.columns))
+        task['targets'] = [str(col) for col in task['targets'] if col in df_hist.columns.tolist()]
+
 
         # if len(df_hist.columns) - len(df_forecast.columns) < len(task['targets']):
         #     logger.warning(f"ETL returned dataframe with less targets then requested. "

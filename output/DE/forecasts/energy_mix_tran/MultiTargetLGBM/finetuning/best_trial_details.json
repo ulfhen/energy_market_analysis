@@ -1,16 +1,16 @@
 {
-    "trial_id": 28,
-    "best_value": 0.9403782629773925,
+    "trial_id": 23,
+    "best_value": 1.3653593529926011,
     "params": {
-        "n_estimators": 895,
-        "learning_rate": 0.013282576573201718,
-        "num_leaves": 36,
+        "n_estimators": 629,
+        "learning_rate": 0.014581061469477734,
+        "num_leaves": 100,
         "max_depth": 3,
-        "min_child_samples": 44,
-        "subsample": 0.6673929021890919,
-        "colsample_bytree": 0.8390334225949507,
-        "reg_alpha": 2.0063187047671315e-05,
-        "reg_lambda": 0.008276745656015546,
-        "min_split_gain": 0.3797897842603447
+        "min_child_samples": 32,
+        "subsample": 0.6153379741657632,
+        "colsample_bytree": 0.9557325340835464,
+        "reg_alpha": 0.008559433409204929,
+        "reg_lambda": 0.0014332990668146505,
+        "min_split_gain": 0.43024821865262897
     }
 }

@@ -506,6 +506,11 @@ def extract_from_database(main_pars:dict,c_dict:dict, db_path:str, outdir:str, f
             f" df_forecast={df_forecast[df_forecast.isna()]}"
         )
 
+
+    for target_ in targets:
+        if not target_ in df_hist.columns:
+            logger.warning(f"Target {target_} not in historic data")
+
     return df_hist, df_forecast
 
     # # --- PREPARE DATA FOR WIND POWER FORECASTING ---

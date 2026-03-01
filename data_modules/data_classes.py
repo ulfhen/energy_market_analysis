@@ -195,27 +195,27 @@ class HistForecastDataset:
                 )
 
         # TODO! THIS IS A HOTFIX -- RETRAIN ALL MODELS -- ADD CLEAR FEATURE CHECK --
-        historic_cols = [
-            c for c in df_historic.columns if c not in set(self._targets_list)
-        ]
+        # historic_cols = [
+        #     c for c in df_historic.columns if c not in set(self._targets_list)
+        # ]
+        #
+        # # columns that exist in historic (non-targets) but are missing in forecast
+        # missing_in_forecast = [c for c in historic_cols if c not in df_forecast.columns]
+        # if missing_in_forecast:
+        #     logger.error(
+        #         "df_forecast is missing columns present in df_historic (excluding targets). "
+        #         "Dropping these columns from df_historic before comparison: %s",
+        #         missing_in_forecast,
+        #     )
+        #     df_historic = df_historic.drop(columns=missing_in_forecast)
 
-        # columns that exist in historic (non-targets) but are missing in forecast
-        missing_in_forecast = [c for c in historic_cols if c not in df_forecast.columns]
-        if missing_in_forecast:
-            logger.error(
-                "df_forecast is missing columns present in df_historic (excluding targets). "
-                "Dropping these columns from df_historic before comparison: %s",
-                missing_in_forecast,
-            )
-            df_historic = df_historic.drop(columns=missing_in_forecast)
+        # # recompute after drop
+        # historic_cols = [
+        #     c for c in df_historic.columns if c not in set(self._targets_list)
+        # ]
 
-        # recompute after drop
-        historic_cols = [
-            c for c in df_historic.columns if c not in set(self._targets_list)
-        ]
-
-        if not compare_columns(df_historic[historic_cols], df_forecast):
-            raise ValueError("df_historic and df_forecast must have same columns")
+        # if not compare_columns(df_historic[historic_cols], df_forecast):
+        #     raise ValueError("df_historic and df_forecast must have same columns")
 
         # check if columns are the same
         if not compare_columns(

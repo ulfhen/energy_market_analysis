@@ -786,12 +786,12 @@ if __name__ == '__main__':
     print("launching update_forecasts.py")
 
     if len(sys.argv) != 6:
-        raise KeyError("Usage: python update_database.py <country_code> <target> <model> <task> <freq>")
-        # country_code = str( 'DE' )
-        # target = str( 'wind_offshore' )
-        # model = str( 'all' )
-        # mode = str( 'train' )
-        # freq = str( 'hourly' )
+        # raise KeyError("Usage: python update_database.py <country_code> <target> <model> <task> <freq>")
+        country_code = str( 'DE' )
+        target = str( 'energy_mix' )
+        model = str( 'MultiTargetLGBM' )
+        mode = str( 'train' )
+        freq = str( 'hourly' )
     else:
         country_code = str( sys.argv[1] )
         target = str( sys.argv[2] )

@@ -15,11 +15,12 @@
     "feature_engineer": null,
     "spatial_agg_method": "mean",
     "targets": [
-        "biomass_tran",
-        "gas_tran",
         "hard_coal_tran",
         "oil_tran",
-        "renewables_tran"
+        "gas_tran",
+        "renewables_tran",
+        "biomass_tran",
+        "waste_tran"
     ],
     "label": "energy_mix_tran"
 }
