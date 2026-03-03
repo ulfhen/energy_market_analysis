@@ -139,9 +139,9 @@ if __name__ == '__main__':
     if len(sys.argv) != 4:
         # raise KeyError("Usage: python update_database.py <country code> <task> <freq>")
 
-        country_code = 'FR'
-        task_argument = 'create_entsoe'
-        freq = 'hourly'
+        country_code = 'DE'
+        task_argument = 'create_smard'
+        freq = 'minutely_15'
     else:
         country_code = sys.argv[1]
         task_argument = str(sys.argv[2])

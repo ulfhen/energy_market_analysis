@@ -37,7 +37,7 @@ jobs:
         run: pipenv run python update_database.py all update_entsoe hourly
 
       - name: Update SMARD Data
-        run: pipenv run python update_database.py DE update_smard hourly
+        run: pipenv run python update_database.py DE update_smard minutely_15
 
       - name: Update EPEXSPOT Data
         run: pipenv run python update_database.py all update_epexspot hourly

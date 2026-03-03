@@ -8,6 +8,7 @@ from requests.adapters import HTTPAdapter, Retry
 from datetime import datetime, timedelta
 from pandas.errors import ParserError
 
+from data_collection_modules.parquet_operations import ParquetOperations
 # from .utils import validate_dataframe
 
 from logger import get_logger
@@ -382,18 +383,18 @@ def collect_smard_from_api(start_date:pd.Timestamp, end_date:pd.Timestamp, datad
     # collect cross-border flows
     fname0 = datadir+f'/tmp_smard_flow_{freq}.parquet'
     if os.path.isfile(fname0):
-        df_smard_flow = pd.read_parquet(fname0)
+        df_smard_flow = ParquetOperations.read(fname0)
         if verbose: logger.info(f"Loading file {fname0} for freq: {freq} ")
     else:
         df_smard_flow = o_smard.get_international_flow(freq)
-        df_smard_flow.to_parquet(fname0)
+        ParquetOperations.save(df_smard_flow, fname0)
         if verbose: logger.info(f"Saving file {fname0} for freq: {freq} ")
 
 
     # collect forecasted generation and load
     fname1 = datadir+f'/tmp_smard_gen_forecasted_{freq}.parquet'
     if os.path.isfile(fname1):
-        df_smard_gen_forecasted = pd.read_parquet(fname1)
+        df_smard_gen_forecasted = ParquetOperations.read(fname1)
         if verbose: logger.info(f"Loading file {fname1} for freq: {freq} ")
     else:
         df_smard_gen_forecasted:pd.DataFrame = o_smard.get_forecasted_generation(freq)
@@ -401,13 +402,13 @@ def collect_smard_from_api(start_date:pd.Timestamp, end_date:pd.Timestamp, datad
             columns={col: col + "_forecasted" for col in df_smard_gen_forecasted.columns if col != 'date'}
         )
         # df_smard_gen_forecasted = df_smard_gen_forecasted.resample('h', on='date').sum()
-        df_smard_gen_forecasted.to_parquet(fname1)
+        ParquetOperations.save(df_smard_gen_forecasted, fname1)
         if verbose: logger.info(f"Saving file {fname1} for freq: {freq} ")
 
     # collecting forecasted consumption
     fname2 = datadir+f'/tmp_smard_con_forecasted_{freq}.parquet'
     if os.path.isfile(fname2):
-        df_smard_con_forecasted = pd.read_parquet(fname2)
+        df_smard_con_forecasted = ParquetOperations.read(fname2)
         if verbose: logger.info(f"Loading file {fname2} for freq: {freq} ")
     else:
         if verbose: logger.info(
@@ -418,7 +419,7 @@ def collect_smard_from_api(start_date:pd.Timestamp, end_date:pd.Timestamp, datad
             columns={col: col + "_forecasted" for col in df_smard_con_forecasted.columns if col != 'date'}
         )
         # df_smard_con_forecasted = df_smard_con_forecasted.resample('h', on='date').sum()
-        df_smard_con_forecasted.to_parquet(fname2)
+        ParquetOperations.save(df_smard_con_forecasted, fname2)
         if verbose: logger.info(f"Saving file {fname2} for freq: {freq} ")
 
 
@@ -426,7 +427,7 @@ def collect_smard_from_api(start_date:pd.Timestamp, end_date:pd.Timestamp, datad
     # collect actual realized generation and load
     fname3 = datadir+f'/tmp_smard_gen_realized_{freq}.parquet'
     if os.path.isfile(fname3):
-        df_smard_gen_realized = pd.read_parquet(fname3)
+        df_smard_gen_realized = ParquetOperations.read(fname3)
         if verbose: logger.info(f"Loading file {fname3} for freq: {freq} ")
     else:
         if verbose: logger.info(
@@ -435,26 +436,26 @@ def collect_smard_from_api(start_date:pd.Timestamp, end_date:pd.Timestamp, datad
         df_smard_gen_realized = o_smard.request_data(modules_id=DataEnergySMARD.REALIZED_POWER_GENERATION)
         df_smard_gen_realized = o_smard._check_freq(df_smard_gen_realized, freq, 'realized_generation')
         # df_smard_gen_realized = df_smard_gen_realized.resample('h', on='date').sum()
-        df_smard_gen_realized.to_parquet(fname3)
+        ParquetOperations.save(df_smard_gen_realized, fname3)
         if verbose: logger.info(f"Saving file {fname3} for freq: {freq} ")
 
     # collect realized consumption
     fname4 = datadir+f'/tmp_smard_con_realized_{freq}.parquet'
     if os.path.isfile(fname4):
-        df_smard_con_realized = pd.read_parquet(fname4)
+        df_smard_con_realized = ParquetOperations.read(fname4)
         if verbose: logger.info(f"Loading file {fname4} for freq: {freq} ")
     else:
         if verbose: logger.info(f"Collecting realized power consumption for {start_date} to {end_date} for freq: {freq} ")
         df_smard_con_realized = o_smard.request_data(modules_id=DataEnergySMARD.REALIZED_POWER_CONSUMPTION)
         df_smard_con_realized = o_smard._check_freq(df_smard_con_realized, freq, 'realized_consumption')
         # df_smard_con_realized = df_smard_con_realized.resample('h', on='date').sum()
-        df_smard_con_realized.to_parquet(fname4)
+        ParquetOperations.save(df_smard_con_realized, fname4)
         if verbose: logger.info(f"Saving file {fname4} for freq: {freq} ")
 
     # collect realize consumption residual
     fname5 = datadir+f'/tmp_smard_con_res_realized_{freq}.parquet'
     if os.path.isfile(fname5):
-        df_smard_con_res_realized = pd.read_parquet(fname5)
+        df_smard_con_res_realized = ParquetOperations.read(fname5)
         if verbose: logger.info(f"Loading file {fname5} for freq: {freq} ")
     else:
         if verbose: logger.info(
@@ -463,20 +464,20 @@ def collect_smard_from_api(start_date:pd.Timestamp, end_date:pd.Timestamp, datad
         df_smard_con_res_realized = o_smard.request_data(modules_id=DataEnergySMARD.REALIZED_POWER_CONSUMPTION_RESIDUAL)
         # df_smard_con_res_realized = df_smard_con_res_realized.resample('h', on='date').sum()
         df_smard_con_res_realized = o_smard._check_freq(df_smard_con_res_realized, freq, 'realized_consumption_residual')
-        df_smard_con_res_realized.to_parquet(fname5)
+        ParquetOperations.save(df_smard_con_res_realized, fname5)
         if verbose: logger.info(f"Saving file {fname5} for freq: {freq} ")
 
     # collect DA prices
     fname6 = datadir+f'/tmp_smard_da_prices_{freq}.parquet'
     if os.path.isfile(fname6):
-        df_da_prices = pd.read_parquet(fname6)
+        df_da_prices = ParquetOperations.read(fname6)
         if verbose: logger.info(f"Loading file {fname6} for freq: {freq} ")
     else:
         if verbose: logger.info(f"Collecting DA prices for {start_date} to {end_date} for freq: {freq} ")
         df_da_prices = o_smard.request_data(modules_id=DataEnergySMARD.SPOT_MARKET)
         # df_da_prices = df_da_prices.resample('h', on='date').mean()
         df_da_prices = o_smard._check_freq(df_da_prices, freq, 'spot_market_price', 'mean')
-        df_da_prices.to_parquet(fname6)
+        ParquetOperations.save(df_da_prices, fname6)
         if verbose: logger.info(f"Saving file {fname6} for freq: {freq} ")
 
 
@@ -498,7 +499,8 @@ def collect_smard_from_api(start_date:pd.Timestamp, end_date:pd.Timestamp, datad
 def _update_log(data_dir: str, freq: str, start_date, end_date,
                 n_rows_before: int, n_cols_before: int,
                 n_rows_after: int, n_cols_after: int,
-                n_nans_added: int, columns: list[str] | None = None):
+                n_nans_added: int, size_before_mb: float,
+                columns: list[str] | None = None):
     """Append a run entry to log.json (create if missing)."""
     log_path = data_dir + 'log.json'
     try:
@@ -517,6 +519,7 @@ def _update_log(data_dir: str, freq: str, start_date, end_date,
         "n_rows_after":   n_rows_after,
         "n_cols_after":   n_cols_after,
         "n_nans_added":   n_nans_added,
+        "size_before_mb": round(size_before_mb, 2),
     }
     if columns is not None:
         entry["columns"] = columns
@@ -529,7 +532,7 @@ def update_smard_from_api(today: pd.Timestamp, data_dir: str, freq: str, verbose
     """Update SMARD data."""
     if verbose: logger.info(f"Updating SMARD data up to {today}")
     fname = data_dir + f'history_{freq}.parquet'
-    df_hist = pd.read_parquet(fname)
+    df_hist = ParquetOperations.read(fname)
     n_rows_before, n_cols_before = df_hist.shape
 
     last_timestamp = pd.Timestamp(df_hist.dropna(how='all').last_valid_index())
@@ -554,10 +557,11 @@ def update_smard_from_api(today: pd.Timestamp, data_dir: str, freq: str, verbose
         df_hist = pd.concat([df_hist[:start_date_ - timedelta(minutes=15)], df_smard[start_date_:]], axis=0)
     else:
         raise NotImplementedError(f"freq={freq} not implemented")
-    df_hist.sort_index(inplace=True)
-    df_hist.to_parquet(fname)
 
-    _update_log(data_dir, freq, start_date_, end_date_, n_rows_before, n_cols_before, *df_smard.shape, n_nans_added)
+    df_hist.sort_index(inplace=True)
+    ParquetOperations.save(df_hist, fname)
+
+    _update_log(data_dir, freq, start_date_, end_date_, n_rows_before, n_cols_before, *df_smard.shape, n_nans_added, size_before_mb=ParquetOperations.memory_mb(df_hist))
 
     if verbose: logger.info(f"SMARD data for freq: {freq} saved to {fname} with shape {df_hist.shape}")
     gc.collect()
@@ -574,13 +578,14 @@ def create_smard_from_api(start_date: pd.Timestamp | None, today: pd.Timestamp,
         start_date=start_date_, end_date=end_date, datadir=data_dir, freq=freq, verbose=verbose
     )
     df_smard = df_smard[start_date:today]
-    df_smard.to_parquet(fname)
+    ParquetOperations.save(df_smard, fname)
 
     _update_log(data_dir, freq, start_date_, end_date,
                 n_rows_before=0, n_cols_before=0,
                 n_rows_after=df_smard.shape[0], n_cols_after=df_smard.shape[1],
                 n_nans_added=int(df_smard.isna().sum().sum()),
-                columns=df_smard.columns.tolist())
+                columns=df_smard.columns.tolist(),
+                size_before_mb=ParquetOperations.memory_mb(df_smard))
 
     if verbose: logger.info(f"SMARD data for freq: {freq} saved to {fname} with shape {df_smard.shape}")
 
