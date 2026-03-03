@@ -165,72 +165,6 @@ class DataEnergySMARD:
 
     mapping = mapping_energy | mapping_load | mapping_prices | mapping_cross_border | mapping_wholesale
 
-    # map original quantities to more easily readable ones
-    # mapping = {
-    #     'Datum':'date',
-    #     'Biomasse [MWh] Originalauflösungen' : "biomass",
-    #     'Kernenergie [MWh] Originalauflösungen': 'nuclear_energy',
-    #     'Erdgas [MWh] Originalauflösungen': 'natural_gas',
-    #     'Pumpspeicher [MWh] Originalauflösungen': 'pumped_storage',
-    #     'Sonstige Konventionelle [MWh] Originalauflösungen' : 'other_conventional',
-    #     'Braunkohle [MWh] Originalauflösungen' : 'lignite',
-    #     'Steinkohle [MWh] Originalauflösungen' : 'hard_coal',
-    #     'Sonstige Erneuerbare [MWh] Originalauflösungen' : 'other_renewables',
-    #     'Wasserkraft [MWh] Originalauflösungen' : 'hydropower',
-    #     'Wind Offshore [MWh] Originalauflösungen' : 'wind_offshore',
-    #     'Wind Onshore [MWh] Originalauflösungen' : 'wind_onshore',
-    #     'Photovoltaik [MWh] Originalauflösungen' : 'solar',
-    #     'Sonstige [MWh] Berechnete Auflösungen' : 'other',
-    #     'Sonstige [MWh] Originalauflösungen' : 'other',
-    #     # load
-    #     'Gesamt (Netzlast) [MWh] Originalauflösungen':'total_grid_load',
-    #     'Gesamt [MWh] Berechnete Auflösungen':'total_load',
-    #     'Gesamt [MWh] Originalauflösungen':'total',
-    #     'Residuallast [MWh] Originalauflösungen':'residual_load',
-    #     # prices
-    #     'Deutschland/Luxemburg [€/MWh] Berechnete Auflösungen':'spot_price',
-    #     'Deutschland/Luxemburg [€/MWh] Originalauflösungen':'spot_price',
-    #     # trade
-    #     'Nettoexport [MWh] Originalauflösungen' : 'net_export',
-    #     'Frankreich (Export) [MWh] Originalauflösungen':'france_export',
-    #     'Frankreich (Import) [MWh] Originalauflösungen':'france_import',
-    #     'Belgien (Export) [MWh] Originalauflösungen': 'belgium_export',
-    #     'Belgien (Import) [MWh] Originalauflösungen': 'belgium_import',
-    #     'Schweiz (Export) [MWh] Originalauflösungen':'switzerland_export',
-    #     'Schweiz (Import) [MWh] Originalauflösungen':'switzerland_import',
-    #     'Tschechien (Export) [MWh] Originalauflösungen':'czechia_export',
-    #     'Tschechien (Import) [MWh] Originalauflösungen':'czechia_import',
-    #     'Dänemark (Export) [MWh] Originalauflösungen':'denmark_export',
-    #     'Dänemark (Import) [MWh] Originalauflösungen':'denmark_import',
-    #     'Niederlande (Export) [MWh] Originalauflösungen':'netherlands_export',
-    #     'Niederlande (Import) [MWh] Originalauflösungen':'netherlands_import',
-    #     'Norwegen (Export) [MWh] Originalauflösungen':'norway_export',
-    #     'Norwegen (Import) [MWh] Originalauflösungen':'norway_import',
-    #     'Polen (Export) [MWh] Originalauflösungen':'poland_export',
-    #     'Polen (Import) [MWh] Originalauflösungen':'poland_import',
-    #     'Schweden (Export) [MWh] Originalauflösungen':'sweden_export',
-    #     'Schweden (Import) [MWh] Originalauflösungen':'sweden_import',
-    #     'Luxemburg (Export) [MWh] Originalauflösungen':'luxembourg_export',
-    #     'Luxemburg (Import) [MWh] Originalauflösungen':'luxembourg_import',
-    #     'Österreich (Export) [MWh] Originalauflösungen':'austria_export',
-    #     'Österreich (Import) [MWh] Originalauflösungen':'austria_import',
-    #     # wholesale trade
-    #     'Dänemark 1 [€/MWh] Originalauflösungen' : 'denmark_1',
-    #     'Dänemark 2 [€/MWh] Originalauflösungen' : 'denmark_2',
-    #     'Frankreich [€/MWh] Originalauflösungen' : 'france',
-    #     'Niederlande [€/MWh] Originalauflösungen': 'netherlands',
-    #     'Österreich [€/MWh] Originalauflösungen': 'austria',
-    #     'Polen [€/MWh] Originalauflösungen': 'poland',
-    #     'Schweden 4 [€/MWh] Originalauflösungen': 'sweden_4',
-    #     'Schweiz [€/MWh] Originalauflösungen': 'switzerland',
-    #     'Tschechien [€/MWh] Originalauflösungen': 'czechia',
-    #     'DE/AT/LU [€/MWh] Originalauflösungen': 'de_at_lu',
-    #     'Italien (Nord) [€/MWh] Originalauflösungen' : 'italien_nord',
-    #     'Slowenien [€/MWh] Originalauflösungen' : 'slovenia',
-    #     'Ungarn [€/MWh] Originalauflösungen': 'hungary'
-    #
-    # }
-
     def __init__(self, start_date:pd.Timestamp, end_date:pd.Timestamp, verbose:bool):
         self.start_date = start_date#-timedelta(milliseconds=1)
         self.end_date = end_date#+timedelta(milliseconds=1)
@@ -288,7 +222,6 @@ class DataEnergySMARD:
             logger.info(f"\tStatus Code: {int(data.status_code)} "
                         f"for modulID: {modulIDs} region: {region} from {int(timestamp_from_in_milliseconds)} "
                         f"to {int(timestamp_to_in_milliseconds)} type: {type} language: {language}")
-        # print("Response Text:", data.text)
 
         # create pandas dataframe out of response string (csv)
         df = pd.read_csv(StringIO(data.text), sep=';')
@@ -372,23 +305,6 @@ class DataEnergySMARD:
 
     def request_data(self, modules_id:list, utc:bool=True):
         return self.requestSmardDataForTimes( modules=modules_id, utc=utc )
-    #
-    # def request_power_generation(self, utc:bool=True)->pd.DataFrame:
-    #     return self.requestSmardDataForTimes( self.REALIZED_POWER_GENERATION, utc=utc )
-    #
-    # def request_realized_consumption(self, utc:bool=True ):
-    #     return self.requestSmardDataForTimes( self.REALIZED_POWER_CONSUMPTION, utc=utc )
-    #
-    # def request_spot_market(self, utc:bool=True)->pd.DataFrame:
-    #     return self.requestSmardDataForTimes( self.SPOT_MARKET, utc=utc )
-    #
-    # def request_forecasted_generation(self, utc:bool=True)->pd.DataFrame:
-    #     return self.requestSmardDataForTimes( self.FORECASTED_POWER_GENERATION, utc=utc )
-    #
-    # def request_forecasted_consumption(self, utc:bool=True)->pd.DataFrame:
-    #     return self.requestSmardDataForTimes( self.FORECASTED_POWER_CONSUMPTION, utc=utc )
-
-    ''' ------------------------------------------------------------- '''
 
     def _check_freq(self, df:pd.DataFrame, freq:str, place:str, type_:str='sum')->pd.DataFrame:
 
@@ -434,15 +350,11 @@ class DataEnergySMARD:
         for country in self.country_map.keys():
             df_country = self.request_data(modules_id=DataEnergySMARD.country_map[country])
             if df.empty: df.index = df_country.index
+
             # create total flow (note Import is always Negative, export is always positive)
             df[f'{country}_export'] = df_country[f'{country}_export'].fillna(0)
             df[f'{country}_import'] = df_country[f'{country}_import'].fillna(0)
-            # df[f'{country}_flow'] = (
-            #         df_country[f'{country}_export'].fillna(0)
-            #         + df_country[f'{country}_import'].fillna(0)
-            # )
-        # df = df.resample('h', on='date').sum()
-        # df.reset_index(names=['date'], inplace=True)
+
         df = self._check_freq(df, freq, 'international_flows')
 
         return df
@@ -453,221 +365,14 @@ class DataEnergySMARD:
         df = self.request_data(modules_id=DataEnergySMARD.FORECASTED_POWER_GENERATION)
         df.rename(columns={'total':'total_gen'}, inplace=True)
         df.rename(columns={'other':'other_gen'}, inplace=True)
-        # if freq=='hourly': df = df.resample('h', on='date').sum()
-        # elif freq == 'minutely_15': pass # assuming 15 min is the default data frequency
-        # else: raise NotImplementedError(f"Frequency {freq} not implemented. "
-        #                                 f"Available frequencies: 'hourly', 'minutely_15'")
-        # df.reset_index(names=['date'], inplace=True)
-        # # Ensure the index is sorted
-        # df.sort_index(inplace=True)
-        # # Compute the time difference between consecutive timestamps
-        # time_diffs = df.index.to_series().diff().dropna()
-        # if (freq == 'minutely_15'):
-        #     # Check if all differences are exactly 15 minutes
-        #     if not (time_diffs == pd.Timedelta(minutes=15)).all():
-        #         raise ValueError(f"Dataframe contains irregular time intervals:\n{time_diffs.value_counts()}")
         df = self._check_freq(df, freq, 'forecasted_generation')
         return df
 
     def get_forecasted_consumption(self,freq:str)->pd.DataFrame:
         if self.verbose: logger.info(f"Collecting forecaster consumption for {self.start_date} to {self.end_date}")
         df = self.request_data(modules_id=DataEnergySMARD.FORECASTED_POWER_CONSUMPTION)
-        # df.rename(columns={'total':'total_gen'}, inplace=True)
-        # df.rename(columns={'other':'other_gen'}, inplace=True)
-        # if freq=='hourly': df = df.resample('h', on='date').sum()
-        # elif freq == 'minutely_15': pass # assuming 15 min is the default data frequency
-        # else: raise NotImplementedError(f"Frequency {freq} not implemented. "
-        #                                 f"Available frequencies: 'hourly', 'minutely_15'")
-        # df.reset_index(names=['date'], inplace=True)
-        # # Ensure the index is sorted
-        # df.sort_index(inplace=True)
-        # # Compute the time difference between consecutive timestamps
-        # time_diffs = df.index.to_series().diff().dropna()
-        # if (freq == 'minutely_15'):
-        #     # Check if all differences are exactly 15 minutes
-        #     if not (time_diffs == pd.Timedelta(minutes=15)).all():
-        #         raise ValueError(f"Dataframe contains irregular time intervals:\n{time_diffs.value_counts()}")
         df = self._check_freq(df, freq, 'forecasted_consumption')
         return df
-
-
-
-    # def request_realized_consumption(self, utc:bool=True)->pd.DataFrame:
-    #     modules = self.REALIZED_POWER_CONSUMPTION
-    #     df = self.requestSmardData(
-    #         modulIDs=modules,
-    #         timestamp_from_in_milliseconds=int(self.start_date.timestamp()*1000),
-    #         timestamp_to_in_milliseconds=int(self.end_date.timestamp()*1000)
-    #     )  # last day of 2022
-    #
-    #     # check if data is corrupted
-    #     errors = 0
-    #     while ('Datum bis' not in df.columns) and (errors < 3):
-    #         time.sleep(2)
-    #         errors += 1
-    #     if ('Datum bis' in df.columns):
-    #         df = self.requestSmardData(
-    #             modulIDs=modules,
-    #             timestamp_from_in_milliseconds=int(self.start_date.timestamp()*1000),
-    #             timestamp_to_in_milliseconds=int(self.end_date.timestamp()*1000)
-    #         )  # last day of 2022
-    #         # fix wrong decimal
-    #         df = df.replace('-', '', regex=False)
-    #         df = df.rename(columns={'Datum von': 'Datum'})
-    #         # df.index=pd.to_datetime(df["Datum"],format='%d.%m.%Y %H:%M')#'%d.%m.%Y %H:%M')
-    #         df.drop('Datum bis', axis=1, inplace=True)
-    #         # df.drop('Datum', axis=1, inplace=True)
-    #         # df.dropna(axis='columns', inplace=True)
-    #         # df.to_csv('./data/power_consumption.tsv',
-    #         #           sep='\t', encoding='utf-8', index=False)
-    #         # df = pd.read_csv('./data/power_consumption.tsv', sep='\t', thousands='.',
-    #         #                  decimal=',', index_col=None, dtype={'Datum': 'string'})
-    #
-    #         # convert dates
-    #         # df['Datum'] = pd.to_datetime(df['Datum'], format="%d.%m.%Y %H:%M")
-    #         for key in df.keys():
-    #             if not key in ['Datum']:
-    #                 df[key] = df[key].apply(self.convert_to_float)
-    #
-    #         # df = df.groupby(['Datum']).sum()
-    #
-    #         # convert to week and drop first and last row with partial values
-    #         # df.reset_index(inplace=True)
-    #         # df = df.resample('h').sum()
-    #         # no drop for step-after chart
-    #         # df.drop(df.tail(1).index, inplace=True)
-    #         # df.drop(df.head(1).index, inplace=True)
-    #
-    #         # save tsv
-    #         # df.to_csv('./data/power_consumption.tsv', sep='\t',
-    #         #            encoding='utf-8', index=True)
-    #         df.rename(columns=self.mapping, inplace=True)
-    #         if utc:
-    #             df['date'] = pd.to_datetime(df['date'], format='%d.%m.%Y %H:%M')
-    #             df['datetime_utc'] = (df['date']
-    #                                   .dt.tz_localize('Europe/Berlin', ambiguous='infer')
-    #                                   .dt.tz_convert('UTC'))
-    #             df['date'] = df['datetime_utc']
-    #             df.drop('datetime_utc', axis=1, inplace=True)
-    #         return df
-
-    # def request_spot_market(self, utc:bool=True)->pd.DataFrame:
-    #     modules = self.SPOT_MARKET
-    #     df = self.requestSmardData(
-    #         modulIDs=modules,
-    #         timestamp_from_in_milliseconds=int(self.start_date.timestamp()*1000),
-    #         timestamp_to_in_milliseconds=int(self.end_date.timestamp()*1000)
-    #     )  # last day of 2022
-    #
-    #     # check if data is corrupted
-    #     errors = 0
-    #     while ('Datum bis' not in df.columns) and (errors < 3):
-    #         time.sleep(2)
-    #         errors += 1
-    #     if ('Datum bis' in df.columns):
-    #         df = self.requestSmardData(
-    #             modulIDs=modules,
-    #             timestamp_from_in_milliseconds=int(self.start_date.timestamp()*1000),
-    #             timestamp_to_in_milliseconds=int(self.end_date.timestamp()*1000)
-    #         )  # last day of 2022
-    #         # fix wrong decimal
-    #         df = df.replace('-', '', regex=False)
-    #         df.rename(columns={'Datum von': 'Datum'}, inplace=True)
-    #         # df.index=pd.to_datetime(df["Datum"],format='%d.%m.%Y %H:%M')#'%d.%m.%Y %H:%M')
-    #         df.drop('Datum bis', axis=1, inplace=True)
-    #         # df.drop('Datum', axis=1, inplace=True)
-    #         # df.dropna(axis='columns', inplace=True)
-    #         # df.to_csv('./data/power_consumption.tsv',
-    #         #           sep='\t', encoding='utf-8', index=False)
-    #         # df = pd.read_csv('./data/power_consumption.tsv', sep='\t', thousands='.',
-    #         #                  decimal=',', index_col=None, dtype={'Datum': 'string'})
-    #
-    #         # convert dates
-    #         # df['Datum'] = pd.to_datetime(df['Datum'], format="%d.%m.%Y %H:%M")
-    #         for key in df.keys():
-    #             if not key in ['Datum']:
-    #                 df[key] = df[key].apply(self.convert_to_float)
-    #
-    #         # df = df.groupby(['Datum']).sum()
-    #
-    #         # convert to week and drop first and last row with partial values
-    #         # df.reset_index(inplace=True)
-    #         # df = df.resample('h').sum()
-    #         # no drop for step-after chart
-    #         # df.drop(df.tail(1).index, inplace=True)
-    #         # df.drop(df.head(1).index, inplace=True)
-    #
-    #         # save tsv
-    #         # df.to_csv('./data/power_consumption.tsv', sep='\t',
-    #         #            encoding='utf-8', index=True)
-    #         df.rename(columns=self.mapping, inplace=True)
-    #
-    #         if utc:
-    #             df['date'] = pd.to_datetime(df['date'], format='%d.%m.%Y %H:%M')
-    #             df['datetime_utc'] = (df['date']
-    #                                   .dt.tz_localize('Europe/Berlin', ambiguous='infer')
-    #                                   .dt.tz_convert('UTC'))
-    #             df['date'] = df['datetime_utc']
-    #             df.drop('datetime_utc', axis=1, inplace=True)
-    #         # Handle repeated hours by assigning unique identifiers
-    #         # df['unique_datetime'] = df['date'].astype(str) + df.groupby('date').cumcount().astype(str)
-    #         #
-    #         # # Convert unique datetime back to datetime (this won't be necessary if you handle data directly)
-    #         # df['unique_datetime'] = pd.to_datetime(df['unique_datetime'], format='%Y-%m-%d %H:%M:%S')
-    #         #
-    #         # # Assume the data is in CET and convert to UTC
-    #         # df['datetime_utc'] = (df['unique_datetime']
-    #         #                       .dt.tz_localize('Europe/Berlin', ambiguous='infer')
-    #         #                       .dt.tz_convert('UTC'))
-    #
-    #         # print(df[['date', 'datetime_utc']])
-    #
-    #         return df
-
-    # def request_forecasted_power_generation(self, utc:bool=True)->pd.DataFrame:
-
-# def update_smard_from_api(today:pd.Timestamp,data_dir:str,verbose):
-#
-#     fname = data_dir + 'history_hourly.parquet'
-#
-#     if not os.path.isdir(fname)
-#
-#         df_hist = pd.read_parquet(fname)
-#
-#     first_timestamp = pd.Timestamp(df_hist.dropna(how='any', inplace=False).first_valid_index())
-#     last_timestamp = pd.Timestamp(df_hist.dropna(how='all', inplace=False).last_valid_index())
-#
-#     # ---------- SET UPDATE TIMES ------------
-#     start_date = last_timestamp-timedelta(hours=24)
-#     end_date = today+timedelta(hours=24)
-#
-#     # ---------- UPDATE SMARD -------------
-#     print(f"Updating SMARD data from {start_date} to {end_date}")
-#     o_smard = DataEnergySMARD( start_date=start_date,  end_date=end_date, verbose=verbose  )
-#     df_smard_flow = o_smard.get_international_flow()
-#     df_smard_gen_forecasted = o_smard.get_forecasted_generation()
-#     df_smard_con_forecasted = o_smard.get_forecasted_consumption()
-#     df_smard = pd.merge(left=df_smard_flow,right=df_smard_gen_forecasted,left_on='date',right_on='date',how='outer')
-#     df_smard = pd.merge(left=df_smard,right=df_smard_con_forecasted,left_on='date',right_on='date',how='outer')
-#     df_smard.set_index('date',inplace=True)
-#     df_smard = df_smard[start_date:today]
-#
-#     # check columns
-#     for col in df_hist.columns:
-#         if not col in df_smard.columns:
-#             raise IOError(f"Error. col={col} is not in the update dataframe. Cannot continue")
-#
-#     # combine
-#     df_hist = df_hist.combine_first(df_smard)
-#     # if not validate_dataframe(df_hist, text="Updated smard df_hist"):
-#     #     raise ValueError(f"Failed to validate the updated dataframe for {fname}")
-#
-#     # save
-#     df_hist.to_parquet(fname)
-#     if verbose:print(f"SMARD data is successfully saved to {fname} with shape {df_hist.shape}")
-#
-#     gc.collect()
-
 
 def collect_smard_from_api(start_date:pd.Timestamp, end_date:pd.Timestamp, datadir:str, freq:str, verbose:bool):
 
@@ -790,44 +495,77 @@ def collect_smard_from_api(start_date:pd.Timestamp, end_date:pd.Timestamp, datad
 
     return df_smard
 
+def _update_log(data_dir: str, freq: str, start_date, end_date,
+                n_rows_before: int, n_cols_before: int,
+                n_rows_after: int, n_cols_after: int,
+                n_nans_added: int, columns: list[str] | None = None):
+    """Append a run entry to log.json (create if missing)."""
+    log_path = data_dir + 'log.json'
+    try:
+        with open(log_path, 'r') as f:
+            log = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        log = []
 
-def update_smard_from_api(today:pd.Timestamp,data_dir:str,freq:str,verbose:bool):
+    entry = {
+        "datetime_utc":   datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+        "freq":           freq,
+        "start_date":     str(start_date),
+        "end_date":       str(end_date),
+        "n_rows_before":  n_rows_before,
+        "n_cols_before":  n_cols_before,
+        "n_rows_after":   n_rows_after,
+        "n_cols_after":   n_cols_after,
+        "n_nans_added":   n_nans_added,
+    }
+    if columns is not None:
+        entry["columns"] = columns
+
+    log.append(entry)
+    with open(log_path, 'w') as f:
+        json.dump(log, f, indent=2)
+
+def update_smard_from_api(today: pd.Timestamp, data_dir: str, freq: str, verbose: bool):
+    """Update SMARD data."""
     if verbose: logger.info(f"Updating SMARD data up to {today}")
     fname = data_dir + f'history_{freq}.parquet'
     df_hist = pd.read_parquet(fname)
-    last_timestamp = pd.Timestamp(df_hist.dropna(how='all', inplace=False).last_valid_index())
-    start_date_ = last_timestamp - timedelta(hours=72) # account for weekends where no data is published
+    n_rows_before, n_cols_before = df_hist.shape
+
+    last_timestamp = pd.Timestamp(df_hist.dropna(how='all').last_valid_index())
+    start_date_ = last_timestamp - timedelta(hours=72)
     end_date_ = today + timedelta(hours=24)
     df_smard = collect_smard_from_api(
         start_date=start_date_, end_date=end_date_, datadir=data_dir, freq=freq, verbose=verbose
     )
-    # check columns
+
     for col in df_hist.columns:
-        if not col in df_smard.columns:
-            print(f"Expected cols: {df_hist.columns.tolist()}")
-            print(f"Actual cols: {df_smard.columns.tolist()}")
-            raise IOError(f"Error. col={col} is not in the update dataframe. Cannot continue. ")
+        if col not in df_smard.columns:
+            logger.error(f"Column mismatch between df_hist and df_smard")
+            logger.error(f"Expected cols: {df_hist.columns.tolist()}")
+            logger.error(f"Actual cols: {df_smard.columns.tolist()}")
+            raise IOError(f"Error. col={col} is not in the update dataframe. Cannot continue.")
+
+    n_nans_added = int(df_smard.isna().sum().sum())
 
     if freq == 'hourly':
-        df_hist = pd.concat([df_hist[:start_date_-timedelta(hours=1)], df_smard[start_date_:]], axis=0)
+        df_hist = pd.concat([df_hist[:start_date_ - timedelta(hours=1)], df_smard[start_date_:]], axis=0)
     elif freq == 'minutely_15':
-        df_hist = pd.concat([df_hist[:start_date_-timedelta(minutes=15)], df_smard[start_date_:]], axis=0)
-    else: raise NotImplementedError(f"freq={freq} not implemented")
+        df_hist = pd.concat([df_hist[:start_date_ - timedelta(minutes=15)], df_smard[start_date_:]], axis=0)
+    else:
+        raise NotImplementedError(f"freq={freq} not implemented")
     df_hist.sort_index(inplace=True)
-    # df_hist = df_smard.combine_first(df_hist[:start_date_])
-
-    # combined_df = pd.concat([df_hist[:start_date_], df_smard[start_date_:]])
-    # result_df = combined_df[~combined_df.index.duplicated(keep='first')]
-    # df_hist = result_df.sort_index()
-    # combine
-    # df_hist = df_hist[:last_timestamp].combine_first(df_smard[last_timestamp:today])
-    # save
     df_hist.to_parquet(fname)
-    if verbose:logger.info(f"SMARD data for freq: {freq} is successfully saved to {fname} with shape {df_hist.shape}")
+
+    _update_log(data_dir, freq, start_date_, end_date_, n_rows_before, n_cols_before, *df_smard.shape, n_nans_added)
+
+    if verbose: logger.info(f"SMARD data for freq: {freq} saved to {fname} with shape {df_hist.shape}")
     gc.collect()
 
 
-def create_smard_from_api(start_date:pd.Timestamp or None, today:pd.Timestamp,data_dir:str,freq:str,verbose:bool):
+def create_smard_from_api(start_date: pd.Timestamp | None, today: pd.Timestamp,
+                          data_dir: str, freq: str, verbose: bool):
+    """Create SMARD data from API."""
     if verbose: logger.info(f"Collecting SMARD data for {start_date} - {today}")
     fname = data_dir + f'history_{freq}.parquet'
     end_date = today + timedelta(hours=24)
@@ -837,54 +575,17 @@ def create_smard_from_api(start_date:pd.Timestamp or None, today:pd.Timestamp,da
     )
     df_smard = df_smard[start_date:today]
     df_smard.to_parquet(fname)
-    if verbose:logger.info(f"SMARD data for freq: {freq} is successfully saved to {fname} with shape {df_smard.shape}")
 
-# def update_create_smard_from_api(start_date:pd.Timestamp or None, today:pd.Timestamp,data_dir:str,verbose):
-#
-#     fname = data_dir + 'history_hourly.parquet'
-#
-#     if not os.path.isdir(fname):
-#         if start_date is None:
-#             raise ValueError("Start date must be provided to create a new dataframe")
-#     else:
-#         df_hist = pd.read_parquet(fname)
-#         first_timestamp = pd.Timestamp(df_hist.dropna(how='any', inplace=False).first_valid_index())
-#         last_timestamp = pd.Timestamp(df_hist.dropna(how='all', inplace=False).last_valid_index())
-#         start_date = last_timestamp - timedelta(hours=24)
-#     end_date = today + timedelta(hours=24)
-#
-#     # ---------- UPDATE SMARD -------------
-#     df_smard = collect_smard_from_api(start_date=start_date, end_date=end_date, verbose=verbose)
-#
-#
-#     # check columns
-#     for col in df_hist.columns:
-#         if not col in df_smard.columns:
-#             raise IOError(f"Error. col={col} is not in the update dataframe. Cannot continue")
-#
-#     # combine
-#     df_hist = df_hist.combine_first(df_smard)
-#     # if not validate_dataframe(df_hist, text="Updated smard df_hist"):
-#     #     raise ValueError(f"Failed to validate the updated dataframe for {fname}")
-#
-#     # save
-#     df_hist.to_parquet(fname)
-#     if verbose:print(f"SMARD data is successfully saved to {fname} with shape {df_hist.shape}")
-#
-#     gc.collect()
+    _update_log(data_dir, freq, start_date_, end_date,
+                n_rows_before=0, n_cols_before=0,
+                n_rows_after=df_smard.shape[0], n_cols_after=df_smard.shape[1],
+                n_nans_added=int(df_smard.isna().sum().sum()),
+                columns=df_smard.columns.tolist())
+
+    if verbose: logger.info(f"SMARD data for freq: {freq} saved to {fname} with shape {df_smard.shape}")
 
 if __name__ == '__main__':
     today = datetime.today()
-    # smard = DataEnergySMARD(start_date=pd.Timestamp(today-timedelta(days=20),tz='UTC'),
-    #                         end_date=pd.Timestamp(today+timedelta(days=1),tz='UTC'))
-    # df = smard.get_international_flow()[['france_export','france_import']]
-
-    # today = pd.Timestamp(datetime.today()).tz_localize(tz='UTC')
-    # today = today.normalize() + pd.DateOffset(hours=today.hour) # leave only hours
-    #
-    # smard = DataEnergySMARD(start_date=today-timedelta(days=20),
-    #                         end_date=today+timedelta(days=1))
-    # df = smard.get_international_flow()[['france_export','france_import']]
 
     start_date = pd.Timestamp(datetime(year=2024, month=2, day=1), tz='UTC')
     today = pd.Timestamp(datetime.today()).tz_localize(tz='UTC')
@@ -895,85 +596,3 @@ if __name__ == '__main__':
     create_smard_from_api(start_date, today, '../database_15min/', freq='minutely_15', verbose=True)
 
     exit(0)
-
-    # ---------- UPDATE SMARD -------------
-    print(f"Updating SMARD data from {start_date} to {end_date}")
-    o_smard = DataEnergySMARD( start_date=start_date,  end_date=end_date, verbose=True)
-
-    # collect cross-border flows
-    df_smard_flow = o_smard.get_international_flow(freq='minutely_15')
-    # df_smard_flow = df_smard_flow.resample('h', on='date').sum()
-    # df_smard_flow.set_index('date',inplace=True)
-
-
-    # collect forecasted generation and load
-    df_smard_gen_forecasted = o_smard.get_forecasted_generation(freq='minutely_15')
-    df_smard_gen_forecasted = df_smard_gen_forecasted.rename(
-        columns={col: col + "_forecasted" for col in df_smard_gen_forecasted.columns if col != 'date'}
-    )
-    df_smard_gen_forecasted = df_smard_gen_forecasted.resample('h', on='date').sum()
-    # df_smard_gen_forecasted.set_index('date',inplace=True)
-
-    df_smard_con_forecasted = o_smard.get_forecasted_consumption(freq='minutely_15')
-    df_smard_con_forecasted = df_smard_con_forecasted.rename(
-        columns={col: col + "_forecasted" for col in df_smard_con_forecasted.columns if col != 'date'}
-    )
-    df_smard_con_forecasted = df_smard_con_forecasted.resample('h', on='date').sum()
-    # df_smard_con_forecasted.set_index('date',inplace=True)
-
-    # collect actual realized generation and load
-    df_smard_gen_realized = o_smard.request_data(modules_id=DataEnergySMARD.REALIZED_POWER_GENERATION)
-    df_smard_gen_realized = df_smard_gen_realized.resample('h', on='date').sum()
-    # df_smard_gen_realized.set_index('date',inplace=True)
-
-    df_smard_con_realized = o_smard.request_data(modules_id=DataEnergySMARD.REALIZED_POWER_CONSUMPTION)
-    df_smard_con_realized = df_smard_con_realized.resample('h', on='date').sum()
-    # df_smard_con_realized.set_index('date',inplace=True)
-
-    df_smard_con_res_realized = o_smard.request_data(modules_id=DataEnergySMARD.REALIZED_POWER_CONSUMPTION_RESIDUAL)
-    df_smard_con_res_realized = df_smard_con_res_realized.resample('h', on='date').sum()
-    # df_smard_con_res_realized.set_index('date',inplace=True)
-
-    # collect DA prices
-    df_da_prices = o_smard.request_data(modules_id=DataEnergySMARD.SPOT_MARKET)
-    df_da_prices = df_da_prices.resample('h', on='date').mean()
-    # df_da_prices.set_index('date',inplace=True)
-
-
-    # merge data
-    df_smard = pd.merge(left=df_smard_flow,right=df_smard_gen_forecasted,left_index=True,right_index=True,how='outer')
-    df_smard = pd.merge(left=df_smard,right=df_smard_con_forecasted,left_index=True,right_index=True,how='outer')
-    df_smard = pd.merge(left=df_smard,right=df_smard_gen_realized,left_index=True,right_index=True,how='outer')
-    df_smard = pd.merge(left=df_smard,right=df_smard_con_realized,left_index=True,right_index=True,how='outer')
-    df_smard = pd.merge(left=df_smard,right=df_smard_con_res_realized,left_index=True,right_index=True,how='outer')
-    df_smard = pd.merge(left=df_smard,right=df_da_prices,left_index=True,right_index=True,how='outer')
-
-    #df_smard.set_index('date',inplace=True)
-    df_smard = df_smard[start_date:today]
-    df_smard.to_csv('./tmp.csv')
-
-    # for key, val in DataEnergySMARD.country_map.items():
-    #     df = smard.request_data(modules_id=val)
-    #     df.set_index('date', inplace=True)
-    #     df_sum = df.aggregate(func=sum)
-    #     print(key, float( df_sum[f"{key}_export"]+df_sum[f"{key}_import"] ) / 1e6, ' TW')
-    # 2024-11-06 12:00:00+00:00 (1730894400000) to 2024-11-13 17:00:00+00:00 (1731517200000)
-    # smard = DataEnergySMARD(start_date=pd.Timestamp('2024-11-10 16:00:00+00:00',tz='UTC'),
-    #                         end_date=pd.Timestamp('2024-11-18 17:00:00+00:00',tz='UTC'),
-    #                         verbose=True)
-    # # df = smard.get_international_flow()[['poland_export','poland_import']]
-    #
-    # print(smard.request_data(modules_id=DataEnergySMARD.REALIZED_POWER_GENERATION).columns)
-    # print(smard.request_data(modules_id=DataEnergySMARD.FORECASTED_POWER_GENERATION).columns)
-    #
-    # print(smard.request_data(modules_id=DataEnergySMARD.REALIZED_POWER_CONSUMPTION).columns)
-    # print(smard.request_data(modules_id=DataEnergySMARD.REALIZED_POWER_CONSUMPTION_RESIDUAL).columns)
-    # print(smard.request_data(modules_id=DataEnergySMARD.FORECASTED_POWER_CONSUMPTION).columns)
-    #
-    # print(smard.request_data(modules_id=DataEnergySMARD.WHOLESALE_PRICES).columns)
-    # print(smard.request_data(modules_id=DataEnergySMARD.WHOLESALE_PRICES))
-
-    # print(df_smard.columns)
-    # print(df_smard.head())
-
-    # pass

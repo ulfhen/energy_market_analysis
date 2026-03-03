@@ -29,7 +29,7 @@ def main(country_code:str, task:str, freq:str, verbose : bool = True):
     if not country_code in ['DE', "FR"]:
         raise ValueError('country code must be "DE" or "FR". Given: {}'.format(country_code))
 
-    c_dict:dict = [dict_ for dict_ in countries_metadata if dict_["code"] == country_code][0]
+    c_dict: dict = [dict_ for dict_ in countries_metadata if dict_["code"] == country_code][0]
     if len(list(c_dict.keys())) == 0:
         raise KeyError(f"No country dict found for country code {country_code}. Check your country code.")
     regions = c_dict["regions"]

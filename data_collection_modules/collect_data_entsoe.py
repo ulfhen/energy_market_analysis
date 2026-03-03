@@ -290,55 +290,6 @@ def fetch_entsoe_data_from_api(country_dict:dict, working_dir:str, start_date:pd
 
     neighborhood = NEIGHBOURS[bidding_zone]
 
-    # df_flows = pd.DataFrame()
-    # fname5 = f"tmp_flows_{bidding_zone}_{freq}.parquet"
-    # cach_fnames.append(fname5)
-    # if os.path.isfile(working_dir + fname5):
-    #     if verbose: logger.info(f"Loading temporary file: {working_dir + fname5}")
-    #     df_flows = pd.read_parquet(working_dir + fname5)
-    # else:
-    #     # query generation
-    #     for i in range(5):
-    #         try:
-    #             df_flows = pd.DataFrame()
-    #             for i, country in enumerate(neighborhood):
-    #                 logger.info(f"Processing flows for country {country} ({i}/{len(neighborhood)})")
-    #                 if not country in country_code_name_mapping:
-    #                     raise KeyError(f"No mapping found for {country} for country code {c_code}")
-    #                 time.sleep(10)
-    #                 df_export = pd.DataFrame(client.query_crossborder_flows(
-    #                     country, bidding_zone, start=start_date, end=today),
-    #                     columns=[country_code_name_mapping[country]+'_flow_export']
-    #                 )
-    #                 time.sleep(10)
-    #                 df_import = pd.DataFrame(client.query_crossborder_flows(
-    #                     bidding_zone, country, start=start_date, end=today),
-    #                     columns=[country_code_name_mapping[country]+'_flow_import']
-    #                 )
-    #                 df_ = pd.merge(df_export,df_import,left_index=True,right_index=True)
-    #                 if df_flows.empty: df_flows = df_.copy()
-    #                 else: df_flows = pd.merge(df_flows, df_.copy(), left_index=True, right_index=True, how='left')
-    #
-    #             if freq == 'hourly': df_flows = df_flows.resample('h').mean()
-    #         except Exception as e:
-    #             logger.error(
-    #                 f"Failed to fetch cross-border flows from ENTSOE API ({i}/{5}) for bidding zone"
-    #                 f"{bidding_zone} for freq {freq} from {start_date} till {today}: \n\t{e}"
-    #             )
-    #             time.sleep(5)
-    #             continue
-    #         break
-    #     if df_flows.empty:
-    #         raise ConnectionAbortedError(
-    #             f"Failed to fetch cross-border flows from ENTSOE API for bidding_zone  "
-    #             f"{bidding_zone} (empty df) for freq {freq} from {start_date} till {today}."
-    #         )
-    #     if verbose: logger.info(f"Saving temporary file: {working_dir + fname5}")
-    #     df_flows.to_parquet(working_dir + fname5)
-    #
-    # # combine
-    # df = pd.merge(df, df_flows, left_index=True, right_index=True, how="left")
-
     df_flows = pd.DataFrame()
     fname6 = f"tmp_flows_{bidding_zone}_{freq}.parquet"
     cach_fnames.append(fname6)
@@ -421,7 +372,6 @@ def fetch_entsoe_data_from_api(country_dict:dict, working_dir:str, start_date:pd
     df = pd.merge(df, df_flows, left_index=True, right_index=True, how="left")
 
 
-
     ''' --------- CROSS-BORDER EXCHANGES (hourly) -------- '''
     df_exchanges = pd.DataFrame()
     fname6 = f"tmp_exchanges_{bidding_zone}_{freq}.parquet"
@@ -502,57 +452,6 @@ def fetch_entsoe_data_from_api(country_dict:dict, working_dir:str, start_date:pd
     # combine
     df = pd.merge(df, df_exchanges, left_index=True, right_index=True, how="left")
 
-
-
-
-    # df_exchanges = pd.DataFrame()
-    # fname6 = f"tmp_exchanges_{bidding_zone}_{freq}.parquet"
-    # cach_fnames.append(fname6)
-    # if os.path.isfile(working_dir + fname6):
-    #     if verbose: logger.info(f"Loading temporary file: {working_dir + fname6}")
-    #     df_exchanges = pd.read_parquet(working_dir + fname6)
-    # else:
-    #     for i in range(5):
-    #         try:
-    #             df_exchanges = pd.DataFrame()
-    #             for i, country in enumerate(neighborhood):
-    #                 logger.info(f"Processing exchanges for country {country} ({i}/{len(neighborhood)})")
-    #                 if not country in country_code_name_mapping:
-    #                     raise KeyError("No mapping found for {}".format(country))
-    #                 time.sleep(10)
-    #                 df_export = pd.DataFrame(client.query_scheduled_exchanges(
-    #                     country, bidding_zone, start=start_date, end=today),
-    #                     columns=[country_code_name_mapping[country]+'_exchange_export']
-    #                 )
-    #                 time.sleep(10)
-    #                 df_import = pd.DataFrame(client.query_scheduled_exchanges(
-    #                     bidding_zone, country, start=start_date, end=today),
-    #                     columns=[country_code_name_mapping[country]+'_exchange_import']
-    #                 )
-    #                 df_ = pd.merge(df_export,df_import,left_index=True,right_index=True)
-    #                 if df_exchanges.empty: df_exchanges = df_.copy()
-    #                 else: df_exchanges = pd.merge(df_exchanges, df_.copy(),left_index=True,right_index=True,how='left')
-    #
-    #             if freq == 'hourly': df_exchanges = df_exchanges.resample('h').mean()
-    #         except Exception as e:
-    #             logger.error(
-    #                 f"Failed to fetch exchanges from ENTSOE API ({i}/{5}) for bidding_zone "
-    #                 f"{bidding_zone} for freq {freq} from {start_date} till {today}: \n\t{e}"
-    #             )
-    #             time.sleep(5)
-    #             continue
-    #         break
-    #     if df_exchanges.empty:
-    #         raise ConnectionAbortedError(
-    #             f"Failed to fetch cross-border exchanges from ENTSOE API for   "
-    #             f"{bidding_zone} (empty df) for freq {freq} from {start_date} till {today}."
-    #         )
-    #     if verbose: logger.info(f"Saving temporary file: {working_dir + fname6}")
-    #     df_exchanges.to_parquet(working_dir + fname6)
-    #
-    # # combine
-    # df = pd.merge(df, df_exchanges, left_index=True, right_index=True, how="left")
-
     # check that columns match before removing temporary files
     if cols:
         for col_name in cols:
@@ -570,12 +469,7 @@ def fetch_entsoe_data_from_api(country_dict:dict, working_dir:str, start_date:pd
         f"Successfully collected ENTSO-E data for freq {freq} with (df={df.shape}) from {start_date} till {today}. "
         f"Removing {len(cach_fnames)} temporary files..."
     )
-    # fname7 = f"tmp_flows_{bidding_zone}.parquet"
-    # if os.path.isfile(working_dir + fname7):
-    #     os.remove(working_dir + fname7)
-    # fname8 = f"tmp_exchanges_{bidding_zone}.parquet"
-    # if os.path.isfile(working_dir + fname8):
-    #     os.remove(working_dir + fname8)
+
     for fname in cach_fnames:
         if os.path.isfile(working_dir + fname):
             os.remove(working_dir + fname)
@@ -587,6 +481,7 @@ def create_entsoe_from_api(country_dict:dict, start_date:pd.Timestamp or None, t
     if not os.path.isdir(data_dir):
         logger.info(f"Directory {data_dir} does not exist, creating it now...")
         os.mkdir(data_dir)
+
     df = fetch_entsoe_data_from_api(country_dict, data_dir, start_date, today, api_key, freq, None, verbose)
     fname = data_dir + f'history_{freq}.parquet'
     if not country_dict["code"] in data_dir:
@@ -595,6 +490,7 @@ def create_entsoe_from_api(country_dict:dict, start_date:pd.Timestamp or None, t
         f"ENTSOE data is successfully collected for country {country_dict['code']} "
         f"for freq {freq}. Shape={df.shape}. Saving into {fname}"
     )
+
     df.to_parquet(fname)
 
 def update_entsoe_from_api(country_dict:dict,today:pd.Timestamp,data_dir:str,api_key:str,freq:str,verbose:bool):
@@ -637,90 +533,3 @@ if __name__ == '__main__':
     today = today.normalize() + pd.DateOffset(hours=today.hour) # leave only hours
     end_date = today
     create_entsoe_from_api(start_date,today,api_key=entsoe_api_key,freq='minutely_15',verbose=True,data_dir='../database_15min/entsoe/')
-
-#
-# class DataENTSOE:
-#     def __init__(self):
-#         pass
-#
-# def update_entsoe_from_api(today:pd.Timestamp,data_dir:str,verbose):
-#     fname = data_dir + 'history_hourly.parquet'
-#     df_hist = pd.read_parquet(fname)
-#
-#     first_timestamp = pd.Timestamp(df_hist.dropna(how='any', inplace=False).first_valid_index())
-#     last_timestamp = pd.Timestamp(df_hist.dropna(how='all', inplace=False).last_valid_index())
-#
-#     # ---------- SET UPDATE TIMES ------------
-#     start_date = last_timestamp-timedelta(hours=24)
-#     end_date = today+timedelta(hours=24)
-#
-#
-# def create_hist(today:pd.Timestamp,data_dir:str,verbose,drop_consumption:bool=True,downsample:bool=True):
-#
-#     generation_type_mapping = {
-#         "actual_load": ["Actual Load"],
-#         "hard_coal": ["Fossil Hard coal Actual Aggregated"],
-#         "lignite": ["Fossil Brown coal/Lignite Actual Aggregated"],
-#         "gas": ["Fossil Gas Actual Aggregated"],
-#         "other_fossil": [
-#             "Fossil Coal-derived gas Actual Aggregated",
-#             "Fossil Oil Actual Aggregated",
-#             "Other Actual Aggregated",
-#         ],
-#         "nuclear": ["Nuclear Actual Aggregated"],
-#         "biomass": ["Biomass Actual Aggregated"],
-#         "waste": ["Waste Actual Aggregated"],
-#         "other_renewable": [
-#             "Geothermal Actual Aggregated",
-#             "Other renewable Actual Aggregated",
-#         ],
-#         "hydro": [
-#             "Hydro Pumped Storage Actual Aggregated",
-#             "Hydro Run-of-river and poundage Actual Aggregated",
-#             "Hydro Water Reservoir Actual Aggregated",
-#         ],
-#         "solar": [
-#             "Solar Actual Aggregated",
-#         ],
-#         "wind_onshore": ["Wind Onshore Actual Aggregated"],
-#         "wind_offshore": ["Wind Offshore Actual Aggregated"],
-#     }
-#
-#     start_date = pd.Timestamp(datetime(year=2024, month=11, day=1),tz='UTC')
-#     end_date = today
-#     client = EntsoePandasClient(api_key="94aa148a-330b-4eee-ba0c-8a5eb0b17825")
-#     df_flows = client.query_crossborder_flows(
-#         country_code_from='DE', country_code_to='FR', start=start_date, end=end_date
-#     )
-#     df_load = client.query_load(country_code='DE', start=start_date, end=end_date)
-#     df_gen = client.query_generation(country_code='DE', start=start_date, end=end_date, psr_type=None)
-#     df_gen.columns = [" ".join(a) for a in df_gen.columns.to_flat_index()]
-#
-#     df_final = pd.concat( [df_load, df_gen], axis=1 )  # Concatenate dataframes in columns dimension.
-#     if "Nuclear Actual Aggregated" in df_final.columns.tolist():
-#         df_final["Nuclear Actual Aggregated"] = df_final["Nuclear Actual Aggregated"].fillna(0)
-#
-#     df_final.index = pd.to_datetime(df_final.index, utc=True).tz_convert(tz="UTC")
-#
-#     if drop_consumption:  # Drop columns containing actual consumption.
-#         df_final.drop(list(df_final.filter(regex="Consumption")), axis=1, inplace=True)
-#
-#     df_final.interpolate(method="time", axis=0, inplace=True)
-#     for joint_category, old_categories in generation_type_mapping.items():
-#         existing_columns = [col for col in old_categories if col in df_final.columns]
-#         if existing_columns:
-#             # Sum up existing columns and drop them
-#             df_final[joint_category] = df_final[existing_columns].sum(axis=1, skipna=False)
-#             df_final.drop(columns=existing_columns, inplace=True)
-#
-#     if downsample:
-#         df_final = df_final.resample("1h").mean()
-#
-#     print(df_final.head())
-#     print(df_final.columns)
-#
-# if __name__ == '__main__':
-#     today = pd.Timestamp(datetime.today()).tz_localize(tz='UTC')
-#     today = today.normalize() + pd.DateOffset(hours=today.hour)
-#     # TODO add tests
-#     create_hist(today,data_dir='./database/entsoe',verbose=True)

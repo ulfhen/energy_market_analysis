@@ -6,9 +6,9 @@ on:
       - Update Database # The name of the first workflow
     types:
       - completed
-  push:
-    paths:
-      - database/**
+#  push:
+#    paths:
+#      - database/**
       
 jobs:
   update_forecasts:

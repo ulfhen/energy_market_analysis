@@ -153,7 +153,7 @@ if __name__ == '__main__':
         # raise KeyError("Usage: python update_database.py <country_code> <task> <freq>")
         country_code = 'DE'
         task_argument = str( 'update_smard' )
-        freq = str( 'hourly' )
+        freq = str( 'minutely_15' )
     else:
         country_code = str( sys.argv[1] )
         task_argument = str( sys.argv[2] )
